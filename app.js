@@ -7,6 +7,8 @@ const path = require('path');
 require('dotenv').config();
 const app = express();
 
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
 //Create MongoDB Atlas Connection
 mongoose.connect(process.env.MONGO_URI, {
     useUnifiedTopology: true, useNewUrlParser: true},
@@ -36,7 +38,8 @@ app.use(session({
 
 //Route Middleware
 app.use('/', require('./routes/login'));
-
+app.use('/forgot', require('./routes/forgot'));
+app.use('/reset', require('./routes/reset'));
 
 
 //Server Initiation

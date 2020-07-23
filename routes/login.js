@@ -6,12 +6,24 @@ router.get('/', (req,res)=>{
 });
 
 router.post('/', (req,res)=>{
-    new User({
-        email: req.body.email,
-        password: req.body.password
-    }).save().then((user)=> {
-        console.log(user);
-        res.redirect('/?success');
+    const {email,password} = req.body;
+    User.findOne({email: email}, (err,user)=>{
+        if (err){
+            console.log(" / Post Email Find Error" + err);
+            res.status(500).send("Internal Server Error");
+            return 0;
+        }
+        if (!user){
+            console.log("Not a registered Email!");
+            res.status(401).send("Not a registered Email ");
+            return 0;
+        }
+        if (user.password != password){
+            console.log("Password Incorrect");
+            res.status(401).send("Incorrect Password");
+            return 0;
+        }
+        res.send("<h1 style='color: green'>Successfully Logged In</h1>");
     });
 });
 
