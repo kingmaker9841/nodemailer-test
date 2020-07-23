@@ -4,7 +4,7 @@ const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+// process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
 router.get('/', (req,res)=>{
     res.render('forgot');
@@ -62,8 +62,7 @@ router.post('/', (req,res)=>{
                 from: process.env.MAILOPT_FROM,
                 to: process.env.MAILOPT_TO,
                 subject: "Password Reset Request",
-                text: "Click on the link below to create a new Password \n" + 'http://' + req.headers.host + '/reset/' + token,
-                html: "\n <strong>If you did not initiate this request. Please contact our costumer support and reset your password</strong>"
+                html: "Click on the link below to create a new Password <br/>" + 'http://' + req.headers.host + '/reset/' + token  +"<br/> <strong>If you did not initiate this request. Please contact our costumer support and reset your password</strong>"
             
             }
             transporter.sendMail(mailOptions, (err, info)=>{

@@ -3,7 +3,8 @@ const User = require('../models/User');
 const async = require('async');
 const nodemailer = require('nodemailer');
 
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
+// process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
 router.get('/:token', (req,res)=>{
     res.render('reset');
@@ -24,6 +25,13 @@ router.post('/:token', (req,res)=>{
                     user.password = password;
                     user.resetPasswordToken = undefined;
                     user.resetPasswordTokenExpiresIn = undefined;
+                    user.save((err)=>{
+                        if (err){
+                            console.log("Error while Saving during /reset/:token " + err);
+                            res.status(500).send("Internal Server Error");
+                            return 0;
+                        }
+                    })
                     done(null, user);
                 });
         },
