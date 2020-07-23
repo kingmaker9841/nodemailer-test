@@ -19,6 +19,25 @@ mongoose.connect(process.env.MONGO_URI, {
     }
 );
 
+//Setting up EJS, BodyParser, CookieParser, Static Pages, and Express Session
+
+app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, './public')));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+app.use(session({
+    resave: false,
+    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET,
+    cookie: {
+        maxAge: 1000*60*60
+    }
+}));
+
+//Route Middleware
+app.use('/', require('./routes/login'));
+
+
 
 //Server Initiation
 app.listen(process.env.PORT || 5000, ()=>{
